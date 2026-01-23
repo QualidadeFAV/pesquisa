@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pesquisa de Satisfação - CER</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* GERAL */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* REMOVE O FLASH AZUL AO TOCAR NO CELULAR */
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #ffffff;
+    color: #0e2a56;
+    padding: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 360'%3E%3Cpath d='M0 67 C 273 183 822 -40 1920 106 V 360 H 0 Z' fill='%23e4f0ff' opacity='0.6'/%3E%3Cpath d='M0 120 C 473 283 1222 -60 1920 150 V 360 H 0 Z' fill='%23d0e4ff' opacity='0.5'/%3E%3Cpath d='M0 200 C 973 350 1722 -10 1920 200 V 360 H 0 Z' fill='%23bcd9ff' opacity='0.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+    position: relative;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    animation: slideUp 0.4s ease;
+}
+
+.modal h3 {
+    color: #1e4c99;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.modal p {
+    margin-bottom: 25px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.modal-botoes {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.modal-btn {
+    background: linear-gradient(135deg, #1f7acb, #59c0ff);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.modal-btn-cancelar {
+    background: linear-gradient(135deg, #666, #999);
+}
+
+.modal-btn-confirmar {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+}
+
+.modal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(95,192,255,0.4);
+}
+
+.modal-btn-cancelar:hover {
+    box-shadow: 0 5px 15px rgba(102,102,102,0.4);
+}
+
+.modal-btn-confirmar:hover {
+    box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* CONTAINER PRINCIPAL COM LOGOS E TÍTULO */
+.titulo-principal {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 50px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+/* CONTAINER DAS LOGOS - UMA ACIMA DA OUTRA */
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    top: 40px;
+}
+
+.logo-fav, .logo-qualidade {
+    width: 120px;
+    height: auto;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+/* FORMULÁRIO */
+form {
+    max-width: 800px;
+    margin: auto;
+    animation: fade 0.6s ease-out;
+    position: relative;
+    z-index: 1;
+}
+
+/* BLOCOS */
+.bloco {
+    background: rgba(255, 255, 255, 0.28);
+    padding: 25px 30px;
+    margin-bottom: 30px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    transition: transform .25s ease, box-shadow .25s ease;
+    animation: fadeSlide 0.5s ease-out;
+}
+
+.bloco:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.28);
+}
+
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* LABELS - AGORA IGUAL AO FAV (CORRIGIDO) */
+label {
+    font-weight: 700;
+    color: #0e2a56;
+    font-size: 14px;      /* Padronizado */
+    margin-bottom: 4px;   /* Padronizado */
+    display: block;       /* Importante para estrutura */
+}
+
+.bloco p, .bloco h3, .bloco span {
+    color: #0e2a56;
+    font-weight: 500;
+}
+
+/* NOVA CLASSE PARA O SUBTÍTULO DISCRETO */
+.subtitulo-discreto {
+    font-size: 13px;
+    color: #666;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+/* INPUTS - MARGENS AJUSTADAS PARA IGUALAR AO FAV */
+input, select, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 2px;        /* Reduzido de 5px para 2px */
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #999;
+    font-size: 15px;
+    color: #0e2a56;
+    background: rgba(255,255,255,0.7);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.bloco-paciente input {
+    padding: 10px 12px;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #1e4c99;
+    box-shadow: 0 0 7px rgba(30, 76, 153, 0.6);
+}
+
+/* Placeholder styling */
+input::placeholder, textarea::placeholder {
+    color: #666;
+    font-style: italic;
+    font-size: 14px;
+}
+
+/* TITULO JUSTIFICATIVA */
+.titulo-justificativa {
+    margin-top: 20px;
+    display: block;
+}
+
+/* NPS E TITULOS DE ÁREA */
+.nps-titulo, .areas-titulo {
+    display: block;
+    margin-bottom: 20px; /* Margem padrão recuperada para não colar */
+    font-weight: 800 !important;
+    color: #0e2a56;
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.areas-titulo {
+    font-size: 20px; 
+}
+
+/* NOVA CLASSE AUXILIAR: Usa margem curta apenas quando tem subtítulo */
+.titulo-com-subtitulo {
+    margin-bottom: 4px !important;
+}
+
+#nps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+#nps label {
+    flex: 1 1 9%;
+    min-width: 40px;
+    max-width: 60px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    border: 1px solid #d0d0d0;
+    cursor: pointer;
+    gap: 4px;
+    color: #0e2a56;
+    font-weight: 700;
+    font-size: 16px;
+    transition: transform 0.2s ease, background 0.25s ease, box-shadow 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+    margin-bottom: 0; 
+}
+
+/* Cores para os botões NPS */
+#nps label[for="nps1"] { background: rgba(255, 180, 180, 0.9); }
+#nps label[for="nps2"] { background: rgba(255, 190, 190, 0.9); }
+#nps label[for="nps3"] { background: rgba(255, 200, 200, 0.9); }
+#nps label[for="nps4"] { background: rgba(255, 210, 210, 0.9); }
+#nps label[for="nps5"] { background: rgba(255, 220, 220, 0.9); }
+#nps label[for="nps6"] { background: rgba(255, 230, 230, 0.9); }
+#nps label[for="nps7"] { background: rgba(255, 240, 200, 0.9); }
+#nps label[for="nps8"] { background: rgba(255, 245, 180, 0.9); }
+#nps label[for="nps9"] { background: rgba(220, 245, 200, 0.9); }
+#nps label[for="nps10"] { background: rgba(200, 245, 200, 0.9); }
+
+#nps label:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.20);
+    filter: brightness(1.1);
+}
+
+#nps label:active {
+    transform: scale(0.93);
+}
+
+#nps input[type="radio"] {
+    display: none;
+}
+
+#nps input[type="radio"]:checked + span {
+    color: #0e2a56;
+    font-weight: 900;
+    text-shadow: 0 0 4px rgba(14,42,86,0.4);
+}
+
+#nps input[type="radio"]:checked + span {
+    transform: scale(1.2);
+    transition: transform 0.2s ease;
+}
+
+/* BOTÕES */
+.botoes-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    margin-bottom: 30px; 
+}
+
+.btn-enviar {
+    width: 70%;
+    padding: 16px 0;
+    background: linear-gradient(135deg, #1f7acb, #59c0ff);
+    border: none;
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+    transition: all 0.3s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-limpar {
+    width: 30%;
+    padding: 16px 0;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    border: none;
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+    transition: all 0.3s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-enviar:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1671b8, #4fc0ff);
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(95,192,255,0.65), 0 8px 22px rgba(0,0,0,0.28);
+    filter: brightness(1.1);
+}
+
+.btn-limpar:hover:not(:disabled) {
+    background: linear-gradient(135deg, #ff5252, #ff7b7b);
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(255,107,107,0.65), 0 8px 22px rgba(0,0,0,0.28);
+    filter: brightness(1.1);
+}
+
+.btn-enviar:active:not(:disabled),
+.btn-limpar:active:not(:disabled) {
+    transform: scale(0.97);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.28);
+}
+
+.btn-enviar:disabled,
+.btn-limpar:disabled {
+    background: linear-gradient(135deg, #666, #999);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* TITULO TEXTO */
+.titulo-texto {
+    text-align: left;
+}
+
+.titulo-principal h1 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #1e4c99;
+    text-shadow: 0 2px 8px rgba(30,76,153,0.35);
+}
+
+.titulo-principal h1 span {
+    font-weight: 700;
+    color: #1671b8;
+}
+
+/* EMOJIS */
+.titulo-principal .emojis {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-left: -20px;
+}
+
+.titulo-principal .emojis span {
+    display: inline-block;
+    animation: float 1.5s ease-in-out infinite;
+    text-shadow: 0 0 6px rgba(95,192,255,0.6);
+}
+
+.titulo-principal .emojis span:nth-child(odd) { animation-delay: 0s; }
+.titulo-principal .emojis span:nth-child(even) { animation-delay: 0.3s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+/* ESTILOS PARA CAMPOS OBRIGATÓRIOS */
+.obrigatorio {
+    color: #e74c3c !important;
+    font-weight: 900;
+}
+
+/* LEGENDA DE CAMPOS OBRIGATÓRIOS */
+.legenda-obrigatorio {
+    text-align: right;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 10px;
+    font-style: italic;
+    margin-right: 20px;
+}
+
+/* MENSAGEM DE ERRO */
+.mensagem-erro {
+    color: #e74c3c;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    display: block;
+    text-align: left;
+    padding: 8px 12px;
+    background: rgba(231, 76, 60, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 1024px) {
+    body { padding: 20px; }
+    .bloco { padding: 20px 25px; }
+    .titulo-principal h1 { font-size: 32px; }
+    .titulo-principal .emojis { font-size: 2.2em; }
+    .logo-fav, .logo-qualidade { width: 100px; }
+    .titulo-principal { gap: 20px; }
+}
+
+@media (max-width: 768px) {
+    body { padding: 15px; }
+    .bloco { padding: 18px 20px; }
+    .titulo-principal h1 { font-size: 28px; }
+    .titulo-principal .emojis { font-size: 2em; }
+    #nps label { min-width: 35px; height: 50px; font-size: 14px; margin-bottom: 0; }
+    .logo-fav, .logo-qualidade { width: 80px; }
+    .titulo-principal { 
+        gap: 20px; 
+        flex-direction: column;
+        text-align: center;
+    }
+    .logo-container {
+        top: 0;
+        order: 1;
+        flex-direction: row;
+        gap: 15px;
+    }
+    .titulo-texto { 
+        text-align: center; 
+        order: 2;
+    }
+    .titulo-principal .emojis { 
+        justify-content: center;
+        margin-left: 0;
+    }
+    .legenda-obrigatorio {
+        text-align: right;
+        margin-right: 10px;
+    }
+    .botoes-container {
+        flex-direction: column;
+    }
+    .btn-enviar, .btn-limpar {
+        width: 100%;
+    }
+    .modal-botoes {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    body { padding: 10px; }
+    .bloco { padding: 15px; }
+    .titulo-principal h1 { font-size: 22px; }
+    .titulo-principal .emojis { font-size: 1.6em; }
+    .logo-fav, .logo-qualidade { width: 70px; }
+    .titulo-principal { 
+        gap: 15px; 
+        margin-bottom: 30px;
+    }
+    .logo-container {
+        gap: 10px;
+    }
+
+    /* Ajuste NPS para celular */
+    #nps label {
+        flex: 1 1 18%;
+        min-width: 0;
+        height: 45px;
+        font-size: 13px;
+    }
+
+    input, select, textarea { font-size: 13px; padding: 8px; }
+    .btn-enviar, .btn-limpar { font-size: 15px; padding: 12px 0; }
+    .modal-content { padding: 25px 20px; }
+    .modal h3 { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div id="modalSucesso" class="modal" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true">
+    <div class="modal-content">
+        <h3 id="modalTitulo">✅ Enviado com Sucesso!</h3>
+        <p>Obrigado pelo seu feedback! Sua opinião é muito importante para nós.</p>
+        <button class="modal-btn" onclick="fecharModal()">Fechar</button>
+    </div>
+</div>
+
+<div id="modalErro" class="modal" role="dialog" aria-labelledby="modalErroTitulo" aria-hidden="true">
+    <div class="modal-content">
+        <h3 id="modalErroTitulo">❌ Erro ao Enviar</h3>
+        <p>Houve um problema ao enviar seu formulário. Por favor, tente novamente.</p>
+        <button class="modal-btn" onclick="fecharModal()">Tentar Novamente</button>
+    </div>
+</div>
+
+<div id="modalLimpar" class="modal" role="dialog" aria-labelledby="modalLimparTitulo" aria-hidden="true">
+    <div class="modal-content">
+        <h3 id="modalLimparTitulo">🗑️ Limpar Formulário</h3>
+        <p>Tem certeza que deseja limpar todo o formulário?<br><strong>Todos os dados não enviados serão perdidos permanentemente.</strong></p>
+        <div class="modal-botoes">
+            <button class="modal-btn modal-btn-cancelar" onclick="fecharModal()">Cancelar</button>
+            <button class="modal-btn modal-btn-confirmar" onclick="confirmarLimpeza()">Sim, Limpar Tudo</button>
+        </div>
+    </div>
+</div>
+
+<div class="titulo-principal">
+    <div class="logo-container">
+        <img src="FAV azul.png" alt="Fundação Altino Ventura" class="logo-fav">
+        <img src="Logo Qualidade Azul - FT-02.png" alt="Escritório da Qualidade" class="logo-qualidade">
+    </div>
+    
+    <div class="titulo-texto">
+        <div class="emojis">
+            <span>✨</span>
+            <span>😊</span>
+            <span>😐</span>
+            <span>😕</span>
+            <span>😠</span>
+            <span>😡</span>
+            <span>✨</span>
+        </div>
+        <h1>Conte-nos sobre sua<br><span>experiência conosco!</span></h1>
+    </div>
+</div>
+
+<form id="form" novalidate>
+<input type="hidden" name="origem" value="CER">
+    <div class="legenda-obrigatorio">* Campos obrigatórios</div>
+    
+    <div class="bloco bloco-paciente" id="bloco-paciente">
+        <label for="nome">Nome do Paciente: <span class="obrigatorio">*</span></label>
+        
+        <div id="area-aviso-nome"></div>
+        
+        <input type="text" name="nome" id="nome" placeholder="Digite o nome completo do paciente" aria-required="true" aria-describedby="area-aviso-nome">
+        
+        <label for="data_atendimento">Data do Atendimento:</label>
+        <input type="date" name="data_atendimento" id="data_atendimento" max="">
+        
+        <label for="prontuario">Prontuário:</label>
+        <input type="text" name="prontuario" id="prontuario" placeholder="Número do prontuário (apenas números)" pattern="[0-9]*" inputmode="numeric">
+        
+        <label for="responsavel">Responsável/Acompanhante:</label>
+        <input type="text" name="responsavel" id="responsavel" placeholder="Nome do responsável ou acompanhante (opcional)">
+        
+        <label for="telefone">Contato:</label>
+        <input type="text" name="telefone" id="telefone" placeholder="(11) 99999-9999">
+        
+        <label for="email">E-mail:</label>
+        
+        <div id="area-aviso-email"></div>
+        
+        <input type="email" name="email" id="email" placeholder="seuemail@exemplo.com (opcional)">
+    </div>
+
+    <div class="bloco" id="bloco-nps">
+        <span class="nps-titulo titulo-com-subtitulo">Nível de Satisfação Geral <span class="obrigatorio">*</span></span>
+        
+        <p class="subtitulo-discreto">Em uma escala de 1 a 10, quanto você recomendaria a Fundação Altino Ventura para um amigo ou familiar?</p>
+        
+        <div id="area-aviso-nps"></div>
+        
+        <div id="nps" role="radiogroup" aria-labelledby="nps-titulo">
+            <label for="nps1"><input type="radio" name="nps" value="1" id="nps1" aria-required="true"><span>1</span></label>
+            <label for="nps2"><input type="radio" name="nps" value="2" id="nps2" aria-required="true"><span>2</span></label>
+            <label for="nps3"><input type="radio" name="nps" value="3" id="nps3" aria-required="true"><span>3</span></label>
+            <label for="nps4"><input type="radio" name="nps" value="4" id="nps4" aria-required="true"><span>4</span></label>
+            <label for="nps5"><input type="radio" name="nps" value="5" id="nps5" aria-required="true"><span>5</span></label>
+            <label for="nps6"><input type="radio" name="nps" value="6" id="nps6" aria-required="true"><span>6</span></label>
+            <label for="nps7"><input type="radio" name="nps" value="7" id="nps7" aria-required="true"><span>7</span></label>
+            <label for="nps8"><input type="radio" name="nps" value="8" id="nps8" aria-required="true"><span>8</span></label>
+            <label for="nps9"><input type="radio" name="nps" value="9" id="nps9" aria-required="true"><span>9</span></label>
+            <label for="nps10"><input type="radio" name="nps" value="10" id="nps10" aria-required="true"><span>10</span></label>
+        </div>
+        <label class="titulo-justificativa">Principal motivo da nota:</label>
+        <textarea name="justificativa" rows="4" placeholder="Conte-nos o que mais contribuiu para esta avaliação (opcional)"></textarea>
+    </div>
+
+    <div class="bloco">
+        <span class="areas-titulo">Avaliação por Áreas</span>
+        
+        <label for="terreo">Recepção — Térreo (Físico):</label>
+        <select name="terreo" id="terreo"><option value=""></option><option>Péssimo</option><option>Ruim</option><option>Regular</option><option>Bom</option><option>Ótimo</option></select>
+        <label for="visual">Recepção — 1º Andar (Visual):</label>
+        <select name="visual" id="visual"><option value=""></option><option>Péssimo</option><option>Ruim</option><option>Regular</option><option>Bom</option><option>Ótimo</option></select>
+        <label for="auditivo">Recepção — 1º Andar (Intelectual/Auditivo):</label>
+        <select name="auditivo" id="auditivo"><option value=""></option><option>Péssimo</option><option>Ruim</option><option>Regular</option><option>Bom</option><option>Ótimo</option></select>
+        <label for="doencas">Recepção — 2º Andar (Intelectual/Doenças Raras):</label>
+        <select name="doencas" id="doencas"><option value=""></option><option>Péssimo</option><option>Ruim</option><option>Regular</option><option>Bom</option><option>Ótimo</option></select>
+        <label for="consultas">Marcação de Consultas:</label>
+        <select name="consultas" id="consultas"><option value=""></option><option>Péssimo</option><option>Ruim</option><option>Regular</option><option>Bom</option><option>Ótimo</option></select>
+        <label for="geral">Atendimento Geral:</label>
+        <select name="geral" id="geral"><option value=""></option><option>Péssimo</option><option>Ruim</option><option>Regular</option><option>Bom</option><option>Ótimo</option></select>
+    </div>
+
+    <div class="bloco">
+        <span class="areas-titulo titulo-com-subtitulo">Espaço Aberto para Sugestões</span>
+        
+        <p class="subtitulo-discreto">Tem alguma sugestão para melhorarmos nossos serviços?</p>
+        
+        <textarea name="sugestoes" id="sugestoes" rows="4" placeholder="Compartilhe suas ideias e sugestões conosco. O que podemos fazer para oferecer um atendimento ainda melhor? (opcional)"></textarea>
+    </div>
+
+    <div class="bloco">
+        <span class="areas-titulo titulo-com-subtitulo">Destaque de Atendimento</span>
+        
+        <p class="subtitulo-discreto">Gostaria de destacar o atendimento de algum profissional?</p>
+        
+        <input type="text" name="profissional_destaque" id="profissional_destaque" placeholder="Nome do profissional que se destacou no atendimento (opcional)">
+        <label for="motivo_destaque">Motivo do destaque:</label>
+        <textarea name="motivo_destaque" id="motivo_destaque" rows="3" placeholder="Por que este profissional merece um destaque especial? Conte-nos sobre a experiência positiva (opcional)"></textarea>
+    </div>
+
+    <div class="botoes-container">
+        <button type="button" id="btnLimpar" class="btn-limpar">🗑️ Limpar Tudo</button>
+        <button type="submit" id="btnEnviar" class="btn-enviar" aria-live="polite">Enviar</button>
+    </div>
+
+</form>
+
+<script>
+// BLOQUEIO PARA DATAS FUTURAS
+function configurarDataMaxima() {
+    const hoje = new Date();
+    const dataFormatada = hoje.toISOString().split('T')[0];
+    document.getElementById('data_atendimento').max = dataFormatada;
+}
+
+// FUNÇÃO PARA VALIDAR EMAIL
+function validarEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}
+
+// FUNÇÃO PARA FORMATAR DATA NO PADRÃO BR (dd/mm/aaaa)
+function formatarDataParaBR(dataISO) {
+    if (!dataISO) return '';
+    
+    const data = new Date(dataISO);
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const ano = data.getFullYear();
+    
+    return `${dia}/${mes}/${ano}`;
+}
+
+// FUNÇÃO PARA MOSTRAR MODAL DE LIMPEZA
+function mostrarModalLimpar() {
+    const modal = document.getElementById('modalLimpar');
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+}
+
+// FUNÇÃO PARA CONFIRMAR LIMPEZA
+function confirmarLimpeza() {
+    // Limpar formulário
+    document.getElementById('form').reset();
+    
+    // Limpar mensagens de erro
+    document.getElementById('area-aviso-nome').innerHTML = '';
+    document.getElementById('area-aviso-nps').innerHTML = '';
+    document.getElementById('area-aviso-email').innerHTML = '';
+    
+    // Remover classes de erro
+    const inputsErro = document.querySelectorAll('.mensagem-erro');
+    inputsErro.forEach(el => el.remove());
+    
+    // Reconfigurar data
+    configurarDataMaxima();
+    
+    // Fechar modal
+    fecharModal();
+    
+    // Scroll suave para o topo
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+    
+    console.log('Formulário limpo com sucesso!');
+}
+
+// MODAL FUNCTIONS
+function mostrarModalSucesso() {
+    const modal = document.getElementById('modalSucesso');
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+}
+
+function mostrarModalErro() {
+    const modal = document.getElementById('modalErro');
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+}
+
+function fecharModal() {
+    const modais = document.querySelectorAll('.modal');
+    modais.forEach(modal => {
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+    });
+    document.body.style.overflow = 'auto';
+}
+
+// Configurar quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    configurarDataMaxima();
+});
+
+// VALIDAÇÃO PARA APENAS NÚMEROS NO PRONTUÁRIO
+function validarApenasNumeros(input) {
+    input.value = input.value.replace(/\D/g, '');
+}
+
+function aplicarMascaraTelefone(valor) {
+    valor = valor.replace(/\D/g, "");
+    if (valor.length > 11) valor = valor.slice(0, 11);
+    if (valor.length > 10) {
+        valor = valor.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    } else if (valor.length > 6) {
+        valor = valor.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    } else if (valor.length > 2) {
+        valor = valor.replace(/(\d{2})(\d{0,5})/, "($1) $2");
+    } else {
+        valor = valor.replace(/(\d{0,2})/, "($1");
+    }
+    return valor;
+}
+
+document.getElementById('telefone').addEventListener('input', function () {
+    this.value = aplicarMascaraTelefone(this.value);
+});
+
+// VALIDAÇÃO DO PRONTUÁRIO - APENAS NÚMEROS
+document.getElementById('prontuario').addEventListener('input', function() {
+    validarApenasNumeros(this);
+});
+
+// Impedir colar texto não numérico no prontuário
+document.getElementById('prontuario').addEventListener('paste', function(e) {
+    e.preventDefault();
+    const textoColado = (e.clipboardData || window.clipboardData).getData('text');
+    const apenasNumeros = textoColado.replace(/\D/g, '');
+    this.value = apenasNumeros;
+});
+
+// EVENT LISTENERS PARA LIMPAR FORMULÁRIO
+document.getElementById('btnLimpar').addEventListener('click', mostrarModalLimpar);
+
+/* VALIDAÇÃO PERSONALIZADA DO FORMULÁRIO */
+document.getElementById('form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = document.getElementById('form');
+    const botao = document.getElementById('btnEnviar');
+    const botaoLimpar = document.getElementById('btnLimpar');
+    const areaAvisoNome = document.getElementById('area-aviso-nome');
+    const areaAvisoNps = document.getElementById('area-aviso-nps');
+    const areaAvisoEmail = document.getElementById('area-aviso-email');
+    
+    // Limpar avisos anteriores
+    areaAvisoNome.innerHTML = '';
+    areaAvisoNps.innerHTML = '';
+    areaAvisoEmail.innerHTML = '';
+    
+    // Validar campos obrigatórios
+    const nome = document.getElementById('nome').value.trim();
+    const npsSelecionado = document.querySelector('input[name="nps"]:checked');
+    const dataAtendimento = document.getElementById('data_atendimento').value;
+    const email = document.getElementById('email').value.trim();
+    
+    let temErro = false;
+    
+    // Validar nome
+    if (!nome) {
+        const mensagemErro = document.createElement('div');
+        mensagemErro.className = 'mensagem-erro';
+        mensagemErro.textContent = 'Por favor, informe o nome do paciente';
+        areaAvisoNome.appendChild(mensagemErro);
+        temErro = true;
+    }
+    
+    // Validar NPS
+    if (!npsSelecionado) {
+        const mensagemErro = document.createElement('div');
+        mensagemErro.className = 'mensagem-erro';
+        mensagemErro.textContent = 'Por favor, selecione uma nota de satisfação';
+        areaAvisoNps.appendChild(mensagemErro);
+        temErro = true;
+    }
+    
+    // Validar email (se preenchido)
+    if (email && !validarEmail(email)) {
+        const mensagemErro = document.createElement('div');
+        mensagemErro.className = 'mensagem-erro';
+        mensagemErro.textContent = 'Por favor, insira um e-mail válido';
+        areaAvisoEmail.appendChild(mensagemErro);
+        temErro = true;
+    }
+    
+    // Validar data (se preenchida)
+    if (dataAtendimento) {
+        const dataSelecionada = new Date(dataAtendimento);
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        
+        if (dataSelecionada > hoje) {
+            const mensagemErro = document.createElement('div');
+            mensagemErro.className = 'mensagem-erro';
+            mensagemErro.textContent = 'A data do atendimento não pode ser futura';
+            document.getElementById('data_atendimento').insertAdjacentElement('afterend', mensagemErro);
+            temErro = true;
+        }
+    }
+    
+    // Se há erro, parar o envio
+    if (temErro) {
+        if (!nome) {
+            document.getElementById('bloco-paciente').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (!npsSelecionado) {
+            document.getElementById('bloco-nps').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (email && !validarEmail(email)) {
+            document.getElementById('bloco-paciente').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+            document.getElementById('bloco-paciente').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+    }
+    
+    // 🔵 MODO ENVIANDO
+    botao.disabled = true;
+    botaoLimpar.disabled = true;
+    botao.textContent = "Enviando...";
+    botao.classList.add('loading');
+
+    // Preparar dados para envio
+    const formData = new FormData(form);
+    
+    // Converter FormData para objeto para manipular a data
+    const dadosParaEnvio = {};
+    for (let [key, value] of formData.entries()) {
+        if (key === 'data_atendimento' && value) {
+            // Formatar a data para o padrão brasileiro (dd/mm/aaaa)
+            dadosParaEnvio[key] = formatarDataParaBR(value);
+        } else {
+            dadosParaEnvio[key] = value;
+        }
+    }
+    
+    // Converter objeto para URLSearchParams
+    const dados = new URLSearchParams();
+    for (let key in dadosParaEnvio) {
+        dados.append(key, dadosParaEnvio[key]);
+    }
+
+    fetch("https://script.google.com/macros/s/AKfycbx3wky9hh4kC15YkcXTUS3fh0xhWBi-Ta1Ee_tsn-9HLErQZo4gpMYy171U_BXY4C2b9w/exec", {
+        method: "POST",
+        mode: "no-cors", // <--- CORREÇÃO AQUI (GITHUB PAGES)
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+        },
+        body: dados.toString()
+    })
+    .then(() => {
+        mostrarModalSucesso();
+        form.reset();
+        configurarDataMaxima();
+        
+        // ROLAR PARA O TOPO (CORREÇÃO AQUI)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        botao.disabled = false;
+        botaoLimpar.disabled = false;
+        botao.textContent = "Enviar";
+        botao.classList.remove('loading');
+    })
+    .catch(() => {
+        mostrarModalErro();
+
+        botao.disabled = false;
+        botaoLimpar.disabled = false;
+        botao.textContent = "Enviar";
+        botao.classList.remove('loading');
+    });
+});
+
+// Remover mensagens de erro do nome quando o usuário começar a preencher
+document.getElementById('nome').addEventListener('input', function() {
+    if (this.value.trim()) {
+        document.getElementById('area-aviso-nome').innerHTML = '';
+    }
+});
+
+// Remover mensagens de erro do NPS quando o usuário selecionar uma opção
+document.querySelectorAll('input[name="nps"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        document.getElementById('area-aviso-nps').innerHTML = '';
+    });
+});
+
+// Remover mensagens de erro do email quando o usuário começar a preencher
+document.getElementById('email').addEventListener('input', function() {
+    document.getElementById('area-aviso-email').innerHTML = '';
+});
+
+// Remover mensagens de erro da data quando o usuário alterar
+document.getElementById('data_atendimento').addEventListener('change', function() {
+    const mensagemErro = this.nextElementSibling;
+    if (mensagemErro && mensagemErro.className === 'mensagem-erro') {
+        mensagemErro.remove();
+    }
+});
+
+// Fechar modal com ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        fecharModal();
+    }
+});
+</script>
+
+</body>
+</html>

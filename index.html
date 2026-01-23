@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal de Pesquisa de Satisfação - FAV</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* RESET E GERAL */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent; /* Remove o azul do touch */
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #ffffff;
+    color: #0e2a56;
+    padding: 30px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Fundo original com ondas */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 360'%3E%3Cpath d='M0 67 C 273 183 822 -40 1920 106 V 360 H 0 Z' fill='%23e4f0ff' opacity='0.6'/%3E%3Cpath d='M0 120 C 473 283 1222 -60 1920 150 V 360 H 0 Z' fill='%23d0e4ff' opacity='0.5'/%3E%3Cpath d='M0 200 C 973 350 1722 -10 1920 200 V 360 H 0 Z' fill='%23bcd9ff' opacity='0.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+    background-attachment: fixed;
+}
+
+/* LOGOS */
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 40px;
+    animation: fadeIn 1s ease;
+}
+
+.logo-fav, .logo-qualidade {
+    height: 80px;
+    width: auto;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    transition: transform 0.3s ease;
+}
+
+.logo-fav:hover, .logo-qualidade:hover {
+    transform: scale(1.05);
+}
+
+/* TÍTULO */
+.titulo-container {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: slideUp 0.8s ease;
+}
+
+.titulo-container h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e4c99;
+    margin-bottom: 10px;
+}
+
+.titulo-container p {
+    font-size: 18px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* MENU DE SELEÇÃO */
+.menu-selecao {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    max-width: 900px;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+/* CARD ESTILO - GLASSMORPHISM */
+.card-opcao {
+    flex: 1;
+    min-width: 280px;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.45); /* Translúcido */
+    backdrop-filter: blur(12px); /* Desfoque do fundo */
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 25px;
+    padding: 40px 30px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efeito elástico */
+    box-shadow: 0 10px 30px rgba(14, 42, 86, 0.1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 1.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* HOVER EFEITO */
+.card-opcao:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 20px 40px rgba(30, 76, 153, 0.25);
+    border-color: #1e4c99;
+}
+
+/* EMOJIS ICON */
+.card-icon {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    transition: transform 0.3s ease;
+    font-size: 60px; /* Tamanho grande para o Emoji */
+    line-height: 1;
+}
+
+.card-opcao:hover .card-icon {
+    transform: scale(1.15) rotate(3deg);
+}
+
+/* TEXTOS DO CARD */
+.card-titulo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e4c99;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.card-descricao {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    display: block;
+    margin-bottom: 25px;
+}
+
+/* BOTÃO DENTRO DO CARD */
+.btn-simulado {
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #1f7acb, #59c0ff);
+    color: white;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: width 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(31, 122, 203, 0.3);
+    width: auto;
+    min-width: 150px;
+}
+
+.card-opcao:hover .btn-simulado {
+    background: linear-gradient(135deg, #0e2a56, #1e4c99);
+    box-shadow: 0 6px 15px rgba(14, 42, 86, 0.4);
+}
+
+/* RODAPÉ */
+footer {
+    margin-top: 60px;
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+    animation: fadeIn 1.5s ease;
+}
+
+/* ANIMAÇÕES */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+    body {
+        padding: 20px;
+        justify-content: flex-start;
+    }
+    
+    .titulo-container {
+        margin-top: 20px;
+    }
+    
+    .logo-fav, .logo-qualidade {
+        height: 60px;
+    }
+
+    .card-opcao {
+        min-width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    .titulo-container h1 {
+        font-size: 26px;
+    }
+}
+</style>
+</head>
+<body>
+
+    <div class="logo-container">
+        <img src="FAV azul.png" alt="Fundação Altino Ventura" class="logo-fav">
+        <img src="Logo Qualidade Azul - FT-02.png" alt="Escritório da Qualidade" class="logo-qualidade">
+    </div>
+
+    <div class="titulo-container">
+        <h1>Pesquisa de Satisfação</h1>
+        <p>Selecione a unidade do seu atendimento:</p>
+    </div>
+
+    <div class="menu-selecao">
+        
+        <a href="fav.html" class="card-opcao">
+            <div class="card-icon">
+                🏥
+            </div>
+            <div>
+                <span class="card-titulo">FAV</span>
+                <span class="card-descricao">Fundação Altino Ventura</span>
+            </div>
+            <div class="btn-simulado">Avaliar Agora →</div>
+        </a>
+
+        <a href="cer.html" class="card-opcao">
+            <div class="card-icon">
+                🧑‍🦯
+            </div>
+            <div>
+                <span class="card-titulo">CER IV</span>
+                <span class="card-descricao">Centro Especializado em<br>Reabilitação</span>
+            </div>
+            <div class="btn-simulado">Avaliar Agora →</div>
+        </a>
+
+    </div>
+
+    <footer>
+        &copy; 2025 Fundação Altino Ventura - Escritório da Qualidade
+    </footer>
+
+</body>
+</html>

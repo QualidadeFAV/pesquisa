@@ -1202,6 +1202,7 @@
 
             // Preparar dados para envio
             const formData = new FormData(form);
+            formData.append("token", "fav-cer-2026-7xP9LkAqR2mS");
             const dadosParaEnvio = {};
             for (let [key, value] of formData.entries()) {
                 if (key === 'data_atendimento' && value) {

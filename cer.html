@@ -28,6 +28,14 @@
             position: relative;
         }
 
+        .icon-svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
         /* MODAL */
         .modal {
             display: none;
@@ -58,6 +66,10 @@
             color: #1e4c99;
             margin-bottom: 15px;
             font-size: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .modal p {
@@ -483,7 +495,7 @@
 
         /* TITULO TEXTO */
         .titulo-texto {
-            text-align: left;
+            text-align: center;
         }
 
         .titulo-principal h1 {
@@ -499,41 +511,13 @@
             color: #1671b8;
         }
 
-        /* EMOJIS */
+        /* ÍCONES DO TÍTULO */
         .titulo-principal .emojis {
-            font-size: 2.5em;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-left: -20px;
-        }
-
-        .titulo-principal .emojis span {
-            display: inline-block;
-            animation: float 1.5s ease-in-out infinite;
-            text-shadow: 0 0 6px rgba(95, 192, 255, 0.6);
-        }
-
-        .titulo-principal .emojis span:nth-child(odd) {
-            animation-delay: 0s;
-        }
-
-        .titulo-principal .emojis span:nth-child(even) {
-            animation-delay: 0.3s;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-6px);
-            }
+            gap: 20px;
         }
 
         /* ESTILOS PARA CAMPOS OBRIGATÓRIOS */
@@ -581,8 +565,9 @@
                 font-size: 32px;
             }
 
-            .titulo-principal .emojis {
-                font-size: 2.2em;
+            .titulo-principal .emojis svg {
+                width: 28px;
+                height: 28px;
             }
 
             .logo-fav,
@@ -608,8 +593,9 @@
                 font-size: 28px;
             }
 
-            .titulo-principal .emojis {
-                font-size: 2em;
+            .titulo-principal .emojis svg {
+                width: 26px;
+                height: 26px;
             }
 
             #nps label {
@@ -679,8 +665,9 @@
                 font-size: 22px;
             }
 
-            .titulo-principal .emojis {
-                font-size: 1.6em;
+            .titulo-principal .emojis svg {
+                width: 20px;
+                height: 20px;
             }
 
             .logo-fav,
@@ -733,7 +720,14 @@
 
     <div id="modalSucesso" class="modal" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true">
         <div class="modal-content">
-            <h3 id="modalTitulo">✅ Enviado com Sucesso!</h3>
+            <h3 id="modalTitulo">
+                <svg class="icon-svg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                Enviado com Sucesso
+            </h3>
             <p>Obrigado pelo seu feedback! Sua opinião é muito importante para nós.</p>
             <button class="modal-btn" onclick="fecharModal()">Fechar</button>
         </div>
@@ -741,7 +735,15 @@
 
     <div id="modalErro" class="modal" role="dialog" aria-labelledby="modalErroTitulo" aria-hidden="true">
         <div class="modal-content">
-            <h3 id="modalErroTitulo">❌ Erro ao Enviar</h3>
+            <h3 id="modalErroTitulo">
+                <svg class="icon-svg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                Erro ao Enviar
+            </h3>
             <p>Houve um problema ao enviar seu formulário. Por favor, tente novamente.</p>
             <button class="modal-btn" onclick="fecharModal()">Tentar Novamente</button>
         </div>
@@ -749,7 +751,14 @@
 
     <div id="modalLimpar" class="modal" role="dialog" aria-labelledby="modalLimparTitulo" aria-hidden="true">
         <div class="modal-content">
-            <h3 id="modalLimparTitulo">🗑️ Limpar Formulário</h3>
+            <h3 id="modalLimparTitulo">
+                <svg class="icon-svg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                Limpar Formulário
+            </h3>
             <p>Tem certeza que deseja limpar todo o formulário?<br><strong>Todos os dados não enviados serão perdidos
                     permanentemente.</strong></p>
             <div class="modal-botoes">
@@ -767,13 +776,25 @@
 
         <div class="titulo-texto">
             <div class="emojis">
-                <span>✨</span>
-                <span>😊</span>
-                <span>😐</span>
-                <span>😕</span>
-                <span>😠</span>
-                <span>😡</span>
-                <span>✨</span>
+                <svg class="icon-svg" style="width: 36px; height: 36px; color: #ff6b6b;" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                    </path>
+                </svg>
+                <svg class="icon-svg" style="width: 36px; height: 36px; color: #f1c40f;" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <svg class="icon-svg" style="width: 36px; height: 36px; color: #2ecc71;" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                    </polygon>
+                </svg>
             </div>
             <h1>Conte-nos sobre sua<br><span>experiência conosco!</span></h1>
         </div>
@@ -1129,8 +1150,13 @@
         // BLOQUEIO PARA DATAS FUTURAS
         function configurarDataMaxima() {
             const hoje = new Date();
-            const dataFormatada = hoje.toISOString().split('T')[0];
+            const ano = hoje.getFullYear();
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            const dia = String(hoje.getDate()).padStart(2, '0');
+            const dataFormatada = `${ano}-${mes}-${dia}`;
+
             document.getElementById('data_atendimento').max = dataFormatada;
+            return dataFormatada;
         }
 
         // FUNÇÃO PARA VALIDAR EMAIL
@@ -1143,12 +1169,12 @@
         function formatarDataParaBR(dataISO) {
             if (!dataISO) return '';
 
-            const data = new Date(dataISO);
-            const dia = String(data.getDate()).padStart(2, '0');
-            const mes = String(data.getMonth() + 1).padStart(2, '0');
-            const ano = data.getFullYear();
+            const partes = dataISO.split('-');
+            if (partes.length === 3) {
+                return `${partes[2]}/${partes[1]}/${partes[0]}`;
+            }
 
-            return `${dia}/${mes}/${ano}`;
+            return dataISO;
         }
 
         // FUNÇÃO PARA MOSTRAR MODAL DE LIMPEZA
@@ -1310,14 +1336,19 @@
 
             // Validar data (se preenchida)
             if (dataAtendimento) {
-                const dataSelecionada = new Date(dataAtendimento);
-                const hoje = new Date();
-                hoje.setHours(0, 0, 0, 0);
+                const dataMaximaHoje = configurarDataMaxima();
 
-                if (dataSelecionada > hoje) {
+                // Comparação direta de string ignora o fuso horário
+                if (dataAtendimento > dataMaximaHoje) {
                     const mensagemErro = document.createElement('div');
                     mensagemErro.className = 'mensagem-erro';
                     mensagemErro.textContent = 'A data do atendimento não pode ser futura';
+
+                    const erroExistente = document.getElementById('data_atendimento').nextElementSibling;
+                    if (erroExistente && erroExistente.classList.contains('mensagem-erro')) {
+                        erroExistente.remove();
+                    }
+
                     document.getElementById('data_atendimento').insertAdjacentElement('afterend', mensagemErro);
                     temErro = true;
                 }

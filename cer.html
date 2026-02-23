@@ -1284,8 +1284,12 @@
         document.getElementById('btnLimpar').addEventListener('click', mostrarModalLimpar);
 
         /* VALIDAÇÃO PERSONALIZADA DO FORMULÁRIO */
+        let isSubmitting = false;
+
         document.getElementById('form').addEventListener('submit', function (e) {
             e.preventDefault();
+
+            if (isSubmitting) return;
 
             const form = document.getElementById('form');
             const botao = document.getElementById('btnEnviar');
@@ -1368,6 +1372,8 @@
                 return;
             }
 
+            isSubmitting = true;
+
             // 🔵 MODO ENVIANDO
             botao.disabled = true;
             botaoLimpar.disabled = true;
@@ -1410,6 +1416,7 @@
                     // ROLAR PARA O TOPO (CORREÇÃO AQUI)
                     window.scrollTo({ top: 0, behavior: 'smooth' });
 
+                    isSubmitting = false;
                     botao.disabled = false;
                     botaoLimpar.disabled = false;
                     botao.textContent = "Enviar";
@@ -1418,6 +1425,7 @@
                 .catch(() => {
                     mostrarModalErro();
 
+                    isSubmitting = false;
                     botao.disabled = false;
                     botaoLimpar.disabled = false;
                     botao.textContent = "Enviar";

@@ -956,6 +956,9 @@
     </form>
 
     <script>
+        // 👉 GERA UM ID ÚNICO PARA CADA TENTATIVA DE ENVIO
+        let idEnvioAtual = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
+
         // BLOQUEIO PARA DATAS FUTURAS
         function configurarDataMaxima() {
             const hoje = new Date();
@@ -1008,6 +1011,10 @@
             inputsErro.forEach(el => el.remove());
 
             configurarDataMaxima();
+
+            // 👉 GERA NOVO ID APÓS LIMPAR
+            idEnvioAtual = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
+
             fecharModal();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -1204,42 +1211,42 @@
                 }
             }
 
+            // 👉 INSERÇÃO DA CHAVE DE SEGURANÇA
+            dadosParaEnvio['id_envio'] = idEnvioAtual;
+
             const dados = new URLSearchParams();
             for (let key in dadosParaEnvio) {
                 dados.append(key, dadosParaEnvio[key]);
             }
 
-            // URL DO SCRIPT GOOGLE
+            // 🚀 OTIMISMO: MOSTRAR SUCESSO E LIMPAR ANTES DO RETORNO DO GOOGLE
+            mostrarModalSucesso();
+            form.reset();
+            configurarDataMaxima();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // 👉 PREPARA PARA O PRÓXIMO IMEDIATAMENTE
+            idEnvioAtual = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
+            isSubmitting = false;
+            botao.disabled = false;
+            botaoLimpar.disabled = false;
+            botao.textContent = "Enviar";
+            botao.classList.remove('loading');
+
+            // URL DO SCRIPT GOOGLE (BACKEND EM SEGUNDO PLANO)
             fetch("https://script.google.com/macros/s/AKfycbx3wky9hh4kC15YkcXTUS3fh0xhWBi-Ta1Ee_tsn-9HLErQZo4gpMYy171U_BXY4C2b9w/exec", {
                 method: "POST",
-                mode: "no-cors", // <--- CORREÇÃO AQUI (GITHUB PAGES)
+                mode: "no-cors",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
                 },
                 body: dados.toString()
             })
                 .then(() => {
-                    mostrarModalSucesso();
-                    form.reset();
-                    configurarDataMaxima();
-
-                    // ROLAR PARA O TOPO (CORREÇÃO AQUI)
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-                    isSubmitting = false;
-                    botao.disabled = false;
-                    botaoLimpar.disabled = false;
-                    botao.textContent = "Enviar";
-                    botao.classList.remove('loading');
+                    console.log("Envio finalizado em background!");
                 })
-                .catch(() => {
-                    mostrarModalErro();
-
-                    isSubmitting = false;
-                    botao.disabled = false;
-                    botaoLimpar.disabled = false;
-                    botao.textContent = "Enviar";
-                    botao.classList.remove('loading');
+                .catch((err) => {
+                    console.error("Falha silenciosa no envio:", err);
                 });
         });
 

@@ -843,7 +843,8 @@
             <input type="text" name="prontuario" id="prontuario" placeholder="Número do prontuário (apenas números)"
                 pattern="[0-9]*" inputmode="numeric">
 
-            <label for="unidade">Unidade do Atendimento:</label>
+            <label for="unidade">Unidade do Atendimento: <span class="obrigatorio">*</span></label>
+            <div id="area-aviso-unidade"></div>
             <select name="unidade" id="unidade">
                 <option value="" disabled selected>Selecione a unidade</option>
                 <option value="Boa Vista">Boa Vista</option>
@@ -1163,6 +1164,7 @@
             const npsSelecionado = document.querySelector('input[name="nps"]:checked');
             const dataAtendimento = document.getElementById('data_atendimento').value;
             const email = document.getElementById('email').value.trim();
+            const unidade = document.getElementById('unidade').value;
 
             let temErro = false;
 
@@ -1172,6 +1174,16 @@
                 mensagemErro.className = 'mensagem-erro';
                 mensagemErro.textContent = 'Por favor, informe o nome do paciente';
                 areaAvisoNome.appendChild(mensagemErro);
+                temErro = true;
+            }
+
+            // Validar unidade
+            if (!unidade) {
+                const areaAvisoUnidade = document.getElementById('area-aviso-unidade');
+                const mensagemErro = document.createElement('div');
+                mensagemErro.className = 'mensagem-erro';
+                mensagemErro.textContent = 'Por favor, selecione a unidade de atendimento';
+                areaAvisoUnidade.appendChild(mensagemErro);
                 temErro = true;
             }
 
@@ -1216,6 +1228,8 @@
             // Se há erro, scroll até o primeiro erro
             if (temErro) {
                 if (!nome) {
+                    document.getElementById('bloco-paciente').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else if (!unidade) {
                     document.getElementById('bloco-paciente').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 } else if (!npsSelecionado) {
                     document.getElementById('bloco-nps').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1317,6 +1331,13 @@
             const mensagemErro = this.nextElementSibling;
             if (mensagemErro && mensagemErro.className === 'mensagem-erro') {
                 mensagemErro.remove();
+            }
+        });
+
+        // Remover mensagens de erro da unidade quando o usuário selecionar
+        document.getElementById('unidade').addEventListener('change', function () {
+            if (this.value) {
+                document.getElementById('area-aviso-unidade').innerHTML = '';
             }
         });
 

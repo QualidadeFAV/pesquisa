@@ -768,6 +768,24 @@
         </div>
     </div>
 
+    <div id="modalConfirmarEnvio" class="modal" role="dialog" aria-labelledby="modalConfirmarTitulo" aria-hidden="true">
+        <div class="modal-content">
+            <h3 id="modalConfirmarTitulo">
+                <svg class="icon-svg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+                Confirmar Envio
+            </h3>
+            <p>Tudo certo com o preenchimento? <br><strong>Tem certeza que deseja enviar sua avaliação?</strong></p>
+            <div class="modal-botoes">
+                <button class="modal-btn modal-btn-cancelar" onclick="fecharModal()">Revisar</button>
+                <button class="modal-btn" onclick="executarEnvio()">Sim, Enviar</button>
+            </div>
+        </div>
+    </div>
+
     <div class="titulo-principal">
         <div class="logo-container">
             <img src="FAV azul.png" alt="Fundação Altino Ventura" class="logo-fav">
@@ -1246,6 +1264,13 @@
             document.body.style.overflow = 'auto';
         }
 
+        function mostrarModalConfirmarEnvio() {
+            const modal = document.getElementById('modalConfirmarEnvio');
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
         // Configurar quando a página carregar
         document.addEventListener('DOMContentLoaded', function () {
             if ('scrollRestoration' in history) {
@@ -1384,7 +1409,21 @@
                 return;
             }
 
+            // Se chegou até aqui, os dados estão válidos!
+            // Em vez de enviar direto, chamamos o modal de confirmação.
+            mostrarModalConfirmarEnvio();
+        }); // <-- AQUI ACABA O EVENT LISTENER DO SUBMIT
+
+        // NOVA FUNÇÃO: Faz o envio de fato após o usuário confirmar no modal
+        function executarEnvio() {
+            fecharModal(); // Fecha o modal de confirmação
+
+            if (isSubmitting) return;
             isSubmitting = true;
+
+            const form = document.getElementById('form');
+            const botao = document.getElementById('btnEnviar');
+            const botaoLimpar = document.getElementById('btnLimpar');
 
             // 🔵 MODO ENVIANDO
             botao.disabled = true;
@@ -1394,8 +1433,6 @@
 
             // Preparar dados para envio
             const formData = new FormData(form);
-
-            // Converter FormData para objeto para manipular a data
             const dadosParaEnvio = {};
             for (let [key, value] of formData.entries()) {
                 if (key === 'data_atendimento' && value) {
@@ -1443,8 +1480,9 @@
                 })
                 .catch((err) => {
                     console.error("Falha silenciosa no envio:", err);
+                    // Opcional: mostrarModalErro() caso você queira tratar a falha aqui futuramente
                 });
-        });
+        }
 
         // Remover mensagens de erro do nome quando o usuário começar a preencher
         document.getElementById('nome').addEventListener('input', function () {

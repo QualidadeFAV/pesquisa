@@ -4,655 +4,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GovCirúrgica | Sistema de Governança</title>
+    <title>Portal de Pesquisa de Satisfação - FAV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* RESET E GERAL */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            /* Remove o azul do touch */
+        }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #ffffff;
+            color: #0e2a56;
+            padding: 30px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Fundo original com ondas */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 360'%3E%3Cpath d='M0 67 C 273 183 822 -40 1920 106 V 360 H 0 Z' fill='%23e4f0ff' opacity='0.6'/%3E%3Cpath d='M0 120 C 473 283 1222 -60 1920 150 V 360 H 0 Z' fill='%23d0e4ff' opacity='0.5'/%3E%3Cpath d='M0 200 C 973 350 1722 -10 1920 200 V 360 H 0 Z' fill='%23bcd9ff' opacity='0.5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: top;
+            background-attachment: fixed;
+        }
 
-    <link rel="stylesheet" href="style.css">
+        /* LOGOS */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease;
+        }
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        .logo-fav,
+        .logo-qualidade {
+            height: 80px;
+            width: auto;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            transition: transform 0.3s ease;
+        }
+
+        .logo-fav:hover,
+        .logo-qualidade:hover {
+            transform: scale(1.05);
+        }
+
+        /* TÍTULO */
+        .titulo-container {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: slideUp 0.8s ease;
+        }
+
+        .titulo-container h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e4c99;
+            margin-bottom: 10px;
+        }
+
+        .titulo-container p {
+            font-size: 18px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* MENU DE SELEÇÃO */
+        .menu-selecao {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            max-width: 900px;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: stretch;
+        }
+
+        /* CARD ESTILO - GLASSMORPHISM */
+        .card-opcao {
+            flex: 1;
+            min-width: 280px;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.45);
+            /* Translúcido */
+            backdrop-filter: blur(12px);
+            /* Desfoque do fundo */
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 25px;
+            padding: 40px 30px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Efeito elástico */
+            box-shadow: 0 10px 30px rgba(14, 42, 86, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* HOVER EFEITO */
+        .card-opcao:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px rgba(30, 76, 153, 0.25);
+            border-color: #1e4c99;
+        }
+
+        .icon-svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        /* CARDS ICON */
+        .card-icon {
+            width: 90px;
+            height: 90px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            transition: transform 0.3s ease;
+            color: #1e4c99;
+        }
+
+        .card-icon svg {
+            width: 60px;
+            height: 60px;
+        }
+
+        .card-opcao:hover .card-icon {
+            transform: scale(1.15) rotate(3deg);
+        }
+
+        /* TEXTOS DO CARD */
+        .card-titulo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e4c99;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .card-descricao {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            display: block;
+            margin-bottom: 25px;
+        }
+
+        /* BOTÃO DENTRO DO CARD */
+        .btn-simulado {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #1f7acb, #59c0ff);
+            color: white;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: width 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(31, 122, 203, 0.3);
+            width: auto;
+            min-width: 150px;
+        }
+
+        .card-opcao:hover .btn-simulado {
+            background: linear-gradient(135deg, #0e2a56, #1e4c99);
+            box-shadow: 0 6px 15px rgba(14, 42, 86, 0.4);
+        }
+
+        /* RODAPÉ */
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            animation: fadeIn 1.5s ease;
+        }
+
+        /* ANIMAÇÕES */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+                justify-content: flex-start;
+            }
+
+            .titulo-container {
+                margin-top: 20px;
+            }
+
+            .logo-fav,
+            .logo-qualidade {
+                height: 60px;
+            }
+
+            .card-opcao {
+                min-width: 100%;
+                margin-bottom: 15px;
+            }
+
+            .titulo-container h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="app-container">
-        <aside class="listing-column">
-            <div class="listing-header">
-                <div class="listing-title" style="margin-bottom:12px; display:flex; flex-direction:column; gap:8px">
-                    <div class="sidebar-header-title">
-                        <div class="sht-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
-                        </div>
-                        <span>Controle de Agenda</span>
-                    </div>
-                    <div style="display:flex; gap:8px">
-                        <select id="location-filter" class="filter-select form-select" style="flex:1"
-                            onchange="applyFilters()">
-                            <option value="ALL">Todas Unidades</option>
-                            <option value="Iputinga">Iputinga</option>
-                            <option value="Boa Vista">Boa Vista</option>
-                            <option value="Serra Talhada">Serra Talhada</option>
-                            <option value="Salgueiro">Salgueiro</option>
-                        </select>
-                        <select id="room-filter" class="filter-select form-select" style="flex:1"
-                            onchange="applyFilters()">
-                            <option value="ALL">Todas Salas</option>
-                        </select>
-                    </div>
-                    <div style="margin-top:8px; display:flex; gap:8px">
-                        <select id="specialty-filter" class="filter-select form-select" style="flex:1"
-                            onchange="applyFilters()">
-                            <option value="ALL">Todas Especialidades</option>
-                        </select>
-                    </div>
-                    <div style="margin-top:8px">
-                        <select id="shift-filter" class="filter-select form-select" style="width:100%"
-                            onchange="applyFilters()">
-                            <option value="ALL">Todos os Turnos</option>
-                            <option value="MANHA">Manhã</option>
-                            <option value="TARDE">Tarde</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="date-navigator">
-                    <button class="view-btn icon-btn" onclick="changeDate(-1)">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M15 18l-6-6 6-6" />
-                        </svg>
-                    </button>
-
-                    <div class="date-display-box" id="date-trigger-box">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" style="color:var(--primary)">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                        </svg>
-                        <input type="text" id="sidebar-date-picker" class="modern-date-input" readonly
-                            placeholder="Selecionar">
-                    </div>
-
-                    <button class="view-btn icon-btn" onclick="changeDate(1)">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 18l6-6-6-6" />
-                        </svg>
-                    </button>
-                </div>
-
-                <div style="margin-top:8px; display:flex; justify-content:center; gap:8px;">
-                    <button class="view-btn" onclick="openExportModal()"
-                        style="display:flex; align-items:center; gap:6px; font-size:0.8rem; background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; flex:1; justify-content:center;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg>
-                        Exportar
-                    </button>
-                    <button id="btn-manual-refresh" class="view-btn" onclick="refreshData()"
-                        style="display:flex; align-items:center; gap:6px; font-size:0.8rem; background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; font-weight:600;"
-                        title="Atualizar Agenda">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M23 4v6h-6"></path>
-                            <path d="M1 20v-6h6"></path>
-                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="date-list" id="slots-list-container">
-            </div>
-        </aside>
-
-        <main class="panel-column">
-            <header class="top-bar">
-                <div class="system-brand">
-                    <div class="brand-logo">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            <path d="M9 12l2 2 4-4"></path>
-                        </svg>
-                    </div>
-                    <div class="brand-text">
-                        <div class="brand-title">GovCirúrgica</div>
-                        <div class="brand-subtitle">Gerenciamento de Contratos</div>
-                    </div>
-                </div>
-
-                <div class="view-toggles">
-                    <button class="view-btn active" id="btn-view-booking" onclick="switchView('booking')">Mapa
-                        Geral</button>
-                    <button class="view-btn" id="btn-view-admin" onclick="switchView('admin')">Gestão de Vagas</button>
-                </div>
-            </header>
-
-            <div class="dashboard-content" id="main-content">
-
-                <div id="section-stats">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
-                        <div style="font-size:0.9rem; font-weight:600; color:#64748b">Indicadores de Desempenho</div>
-
-                        <div style="display:flex; gap:12px">
-                            <button onclick="generateDashboardPDF()" class="btn btn-ghost"
-                                style="padding: 6px 12px; font-size: 0.8rem; border:1px solid #cbd5e1; background:white; color:#475569"
-                                title="Baixar PDF">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                    <polyline points="7 10 12 15 17 10"></polyline>
-                                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                                </svg>
-                                PDF
-                            </button>
-
-                            <div
-                                style="display:flex; align-items:center; gap:8px; background:white; padding:6px 12px; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 1px 2px rgba(0,0,0,0.05)">
-                                <span style="font-size:0.8rem; font-weight:600; color:#1e293b">Período:</span>
-                                <input type="date" id="dash-date-start"
-                                    style="border:none; font-weight:600; color:#0284c7; outline:none; background:transparent; font-family:'Inter'"
-                                    onchange="updateKPIs()">
-                                <span>até</span>
-                                <input type="date" id="dash-date-end"
-                                    style="border:none; font-weight:600; color:#0284c7; outline:none; background:transparent; font-family:'Inter'"
-                                    onchange="updateKPIs()">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="global-stats-row">
-                        <div class="global-stat-card">
-                            <div class="gs-icon" style="background:#f1f5f9; color:#475569">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                                </svg>
-                            </div>
-                            <div class="gs-info">
-                                <div class="gs-label">Total de Marcações</div>
-                                <div class="gs-value" id="glb-marcacoes">0</div>
-                            </div>
-                        </div>
-
-                        <div class="global-stat-card">
-                            <div class="gs-icon" style="background:#ecfdf5; color:#059669">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                                </svg>
-                            </div>
-                            <div class="gs-info">
-                                <div class="gs-label">Total de Cirurgia</div>
-                                <div class="gs-value" id="glb-cirurgia">0</div>
-                            </div>
-                        </div>
-
-                        <div class="global-stat-card">
-                            <div class="gs-icon" style="background:#eff6ff; color:#2563eb">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                                </svg>
-                            </div>
-                            <div class="gs-info">
-                                <div class="gs-label">Total de Laser</div>
-                                <div class="gs-value" id="glb-laser">0</div>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <div class="kpi-grid" id="kpi-panel">
-                        <div class="kpi-card">
-                            <div class="kpi-header">
-                                <div>
-                                    <div class="kpi-label" style="color:#7c3aed">Governança • Meta 60%</div>
-                                    <div class="kpi-desc">Procedimentos Regulados</div>
-                                </div>
-                                <div class="kpi-value-big" id="kpi-60-val">0.0%</div>
-                            </div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" id="prog-60" style="width: 0%; background: #7c3aed"></div>
-                            </div>
-                            <div class="kpi-subgrid">
-                                <div class="sub-stat">
-                                    <div class="sub-stat-label">ESTADO</div>
-                                    <div class="sub-stat-val" id="stat-estado">0%</div>
-                                </div>
-                                <div class="sub-stat">
-                                    <div class="sub-stat-label">SERRA</div>
-                                    <div class="sub-stat-val" id="stat-serra">0%</div>
-                                </div>
-                                <div class="sub-stat">
-                                    <div class="sub-stat-label">SALGUEIRO</div>
-                                    <div class="sub-stat-val" id="stat-salgueiro">0%</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="kpi-card">
-                            <div class="kpi-header">
-                                <div>
-                                    <div class="kpi-label" style="color:#64748b">Municípios</div>
-                                    <div class="kpi-desc">Procedimentos Realizados</div>
-                                </div>
-                                <div class="kpi-value-big" id="kpi-mun-val" style="font-size: 2rem;">--</div>
-                            </div>
-                            <div class="kpi-subgrid">
-                                <div class="sub-stat">
-                                    <div class="sub-stat-label">RECIFE</div>
-                                    <div class="sub-stat-val" id="stat-recife">0%</div>
-                                </div>
-                                <div class="sub-stat">
-                                    <div class="sub-stat-label">JABOATÃO</div>
-                                    <div class="sub-stat-val" id="stat-jaboatao">0%</div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="kpi-card">
-                            <div class="kpi-header">
-                                <div>
-                                    <div class="kpi-label" style="color:#059669">Governança • Meta 40%</div>
-                                    <div class="kpi-desc">Procedimentos Internos</div>
-                                </div>
-                                <div class="kpi-value-big" id="kpi-40-val">0.0%</div>
-                            </div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" id="prog-40" style="width: 0%; background: #059669"></div>
-                            </div>
-                            <div class="kpi-subgrid">
-                                <div class="sub-stat">
-                                    <div class="sub-stat-label">ESTADO (INT)</div>
-                                    <div class="sub-stat-val" id="stat-int-estado">0%</div>
-                                </div>
-                                <div class="sub-stat">
-                                    <div class="sub-stat-label">SERRA (INT)</div>
-                                    <div class="sub-stat-val" id="stat-int-serra">0%</div>
-                                </div>
-                                <div class="sub-stat">
-                                    <div class="sub-stat-label">SALGUEIRO (INT)</div>
-                                    <div class="sub-stat-val" id="stat-int-salgueiro">0%</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="view-booking" class="view-section">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
-                        <div class="kpi-card" style="padding: 24px; min-height: 350px;">
-                            <div class="section-title" style="margin-bottom: 16px;">Distribuição por Local Físico</div>
-                            <div style="height: 220px; position: relative;">
-                                <canvas id="chart-location"></canvas>
-                            </div>
-                        </div>
-                        <div class="kpi-card" style="padding: 24px; min-height: 350px;">
-                            <div class="section-title" style="margin-bottom: 16px;">Governança por Contrato</div>
-                            <div style="height: 220px; position: relative;">
-                                <canvas id="chart-specialty"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="view-admin" class="view-section" style="display:none">
-                    <div class="manager-section">
-                        <div class="section-header">
-                            <div class="section-title">Gerador de Capacidade em Lote</div>
-                            <div class="section-desc">Defina os parâmetros para criar blocos de agenda.</div>
-                        </div>
-
-                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:16px">
-                            <div class="form-group" style="margin:0">
-                                <label class="form-label">Unidade / Local</label>
-                                <select class="form-select" id="bulk-location">
-                                    <option value="Iputinga">Iputinga</option>
-                                    <option value="Boa Vista">Boa Vista</option>
-                                    <option value="Serra Talhada">Serra Talhada</option>
-                                    <option value="Salgueiro">Salgueiro</option>
-                                </select>
-                            </div>
-                            <div class="form-group" style="margin:0">
-                                <label class="form-label">Sala</label>
-                                <input type="number" class="form-input" id="bulk-room" placeholder="Nº">
-                            </div>
-                            <div class="form-group" style="margin:0">
-                                <label class="form-label">Grupo de Procedimento</label>
-                                <select class="form-select" id="bulk-group">
-                                    <option value="CIRURGIA">Cirurgia</option>
-                                    <option value="LASER">Laser</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:24px">
-                            <div class="form-group" style="margin:0">
-                                <label class="form-label">Médico Responsável</label>
-                                <input type="text" class="form-input" id="bulk-doctor" placeholder="Dr. Nome do Médico">
-                            </div>
-                            <div class="form-group" style="margin:0">
-                                <label class="form-label">Data da Agenda</label>
-                                <input type="date" class="form-input" id="bulk-date">
-                            </div>
-                        </div>
-
-                        <div class="bulk-grid" style="align-items:end; border-top:1px solid #cbd5e1; padding-top:20px">
-                            <div class="form-group" style="margin:0">
-                                <label class="form-label">Horário Inicial</label>
-                                <input type="time" class="form-input" id="bulk-start-time" value="07:00">
-                            </div>
-                            <div class="form-group" style="margin:0">
-                                <label class="form-label">Horário Final</label>
-                                <input type="time" class="form-input" id="bulk-end-time" value="12:00">
-                            </div>
-                            <div class="form-group" style="margin:0">
-                                <label class="form-label">Quantidade de Vagas</label>
-                                <input type="number" class="form-input" id="bulk-qty" value="1" min="1" max="20">
-                            </div>
-                            <button class="btn btn-primary" onclick="bulkCreateSlots()">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                </svg>
-                                Criar Vagas
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="manager-section">
-                        <div class="section-header"
-                            style="justify-content: space-between; display: flex; align-items: center;">
-                            <div>
-                                <div class="section-title">Painel de Vagas Abertas</div>
-                                <div class="section-desc">Controle total das vagas disponíveis.</div>
-                            </div>
-                            <button class="btn btn-danger" id="btn-delete-selected"
-                                style="padding:6px 16px; font-size:0.85rem; display:none; background-color: #ef4444; color: white;"
-                                onclick="deleteSelectedSlots()">
-                                Excluir Selecionados (<span id="count-selected">0</span>)
-                            </button>
-                        </div>
-                        <div class="table-wrapper">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width:40px"><input type="checkbox" id="check-all-slots"
-                                                onchange="toggleAllSlots(this)" style="cursor: pointer;"></th>
-                                        <th>Data</th>
-                                        <th>Hora</th>
-                                        <th>Sala</th>
-                                        <th>Médico / Esp.</th>
-                                        <th>Status</th>
-                                        <th style="text-align:center">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="admin-table-body">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+    <div class="logo-container">
+        <img src="FAV azul.png" alt="Fundação Altino Ventura" class="logo-fav">
+        <img src="Logo Qualidade Azul - FT-02.png" alt="Escritório da Qualidade" class="logo-qualidade">
     </div>
 
-    <div class="modal-overlay" id="booking-modal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <div>
-                    <div class="modal-title">Realizar Agendamento</div>
-                    <div style="font-size:0.85rem; color:#64748b; margin-top:4px" id="modal-slot-info">...</div>
-                </div>
-                <button class="close-btn" onclick="closeModal()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-
-            <div class="modal-body" id="modal-form"
-                style="display:flex; flex-direction:column; gap:20px; padding-top:16px">
-                <input type="hidden" id="selected-slot-id">
-
-                <div style="background:#f8fafc; padding:16px; border-radius:8px; border:1px solid #e2e8f0">
-                    <div
-                        style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:6px">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        Identificação do Paciente
-                    </div>
-                    <div style="display:grid; grid-template-columns: 1fr 2fr; gap:16px">
-                        <div class="form-group" style="margin:0">
-                            <label class="form-label">Prontuário</label>
-                            <input type="text" class="form-input" id="bk-record" placeholder="Nº">
-                        </div>
-                        <div class="form-group" style="margin:0">
-                            <label class="form-label">Nome Completo</label>
-                            <input type="text" class="form-input" id="bk-patient" placeholder="Nome do paciente">
-                        </div>
-                    </div>
-                </div>
-
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-
-                    <div style="background:#f8fafc; padding:16px; border-radius:8px; border:1px solid #e2e8f0;">
-                        <div
-                            style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:6px">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                            </svg>
-                            Dados Clínicos
-                        </div>
-                        <div class="form-group" style="margin-bottom:12px">
-                            <label class="form-label">Grupo</label>
-                            <input type="text" class="form-input" id="bk-specialty" readonly
-                                style="background:#f1f5f9; color:#64748b; font-weight:600; cursor:not-allowed">
-                        </div>
-                        <div class="form-group" style="margin:0">
-                            <label class="form-label">Procedimento Realizado</label>
-                            <select class="form-select" id="bk-procedure" onchange="checkWarning()">
-                                <option value="">Selecione...</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div
-                        style="background:#f8fafc; padding:16px; border-radius:8px; border:1px solid #e2e8f0; display:flex; flex-direction:column; justify-content:space-between;">
-                        <div>
-                            <div
-                                style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:6px">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                </svg>
-                                Governança
-                            </div>
-                            <div class="form-group" style="margin-bottom:12px">
-                                <label class="form-label">Contrato</label>
-                                <select class="form-select" id="bk-contract" onchange="handleContractChange()">
-                                    <option value="">Selecione...</option>
-                                    <option value="ESTADO">ESTADO</option>
-                                    <option value="SERRA">SERRA</option>
-                                    <option value="SALGUEIRO">SALGUEIRO</option>
-                                    <hr>
-                                    <option value="RECIFE">RECIFE (Município)</option>
-                                    <option value="JABOATÃO">JABOATÃO (Município)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label
-                                style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.9rem; font-weight:600; cursor:pointer; background:white; padding:10px; border:1px solid #cbd5e1; border-radius:8px; transition:0.2s; user-select:none;"
-                                title="Marcar se é Regulado">
-                                <input type="checkbox" id="bk-proc-regulated" checked onchange="toggleRegulated()"
-                                    style="width:16px; height:16px; cursor:pointer;">
-                                Procedimento Regulado
-                            </label>
-
-                            <div id="bk-internal-type-container"
-                                style="display:none; margin-top:10px; background:#f1f5f9; padding:10px 14px; border-radius:8px; border:1px dashed #94a3b8;">
-                                <div
-                                    style="font-size:0.75rem; font-weight:700; color:#64748b; margin-bottom:8px; text-transform:uppercase;">
-                                    Motivo *</div>
-                                <div style="display:flex; gap:16px; justify-content: center;">
-                                    <label
-                                        style="display:flex; align-items:center; gap:4px; font-size:0.85rem; font-weight:600; color:#0f172a; cursor:pointer;">
-                                        <input type="radio" name="bk-internal-type" value="Emergência"> Emergência
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:4px; font-size:0.85rem; font-weight:600; color:#0f172a; cursor:pointer;">
-                                        <input type="radio" name="bk-internal-type" value="Projetos"> Projetos
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="modal-footer" style="margin-top:8px; border-radius:0 0 8px 8px; padding: 16px 24px;">
-                    <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
-                    <div id="action-buttons-area" style="display:flex; gap:12px">
-                        <button class="btn btn-primary" onclick="confirmBookingFromModal()">Confirmar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="titulo-container">
+        <h1>Pesquisa de Satisfação</h1>
+        <p>Selecione a unidade do seu atendimento:</p>
     </div>
 
-    <div class="modal-overlay" id="message-modal">
-        <div class="modal-card" style="max-width: 400px; text-align: center; padding: 32px 24px;">
-            <div style="width: 64px; height: 64px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: grid; place-items: center; margin: 0 auto 16px auto; font-size: 32px;"
-                id="msg-icon"></div>
-            <h3 class="modal-title" id="msg-title"
-                style="justify-content: center; font-size: 1.25rem; margin-bottom: 8px;">Título</h3>
-            <div style="color: #475569; margin-bottom: 24px; line-height: 1.5;" id="msg-body">Corpo da mensagem</div>
-            <div style="display: flex; gap: 12px; justify-content: center;" id="msg-actions">
-                <button class="btn btn-ghost" onclick="closeMessageModal()" id="msg-btn-cancel">Cancelar</button>
-                <button class="btn btn-primary" id="msg-btn-confirm">Confirmar</button>
+    <div class="menu-selecao">
+
+        <a href="fav.html" class="card-opcao">
+            <div class="card-icon" style="font-size: 60px;">
+                👁️
             </div>
-        </div>
+            <div>
+                <span class="card-titulo">FAV</span>
+                <span class="card-descricao">Fundação Altino Ventura</span>
+            </div>
+            <div class="btn-simulado">Avaliar Agora →</div>
+        </a>
+
+        <a href="cer.html" class="card-opcao">
+            <div class="card-icon" style="font-size: 60px;">
+                ♿
+            </div>
+            <div>
+                <span class="card-titulo">CER IV</span>
+                <span class="card-descricao">Centro Especializado em<br>Reabilitação</span>
+            </div>
+            <div class="btn-simulado">Avaliar Agora →</div>
+        </a>
+
     </div>
 
-    <div class="modal-overlay" id="login-modal">
-        <div class="modal-card"
-            style="max-width: 400px; text-align: center; padding: 40px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
-            <div style="margin-bottom: 24px;">
-                <div
-                    style="width: 60px; height: 60px; background: #0284c7; color: white; border-radius: 12px; display: grid; place-items: center; font-size: 1.8rem; margin: 0 auto 16px auto; font-weight: 700; box-shadow: 0 0 20px rgba(2, 132, 199, 0.4);">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                    </svg>
-                </div>
-                <h2 style="font-size: 1.5rem; color: #1e293b; font-weight: 700; margin-bottom: 8px;">Acesso Restrito
-                </h2>
-                <p style="color: #475569; font-size: 0.9rem;">Identifique-se com seu token de marcador.</p>
-            </div>
-
-            <div style="margin-bottom: 24px;">
-                <input type="password" id="login-token" class="form-input" placeholder="Token de Acesso"
-                    style="text-align: center; font-size: 1.2rem; letter-spacing: 4px; padding: 16px; font-weight: 700;"
-                    onkeypress="handleLoginKey(event)">
-                <div id="login-error"
-                    style="color: #dc2626; font-size: 0.8rem; margin-top: 8px; display: none; font-weight: 600;">Token
-                    inválido.</div>
-            </div>
-
-            <button class="btn btn-primary" onclick="attemptLogin()"
-                style="width: 100%; padding: 14px; font-size: 1rem;">
-                Acessar Sistema
-            </button>
-        </div>
-    </div>
-
-    <div id="app-splash-screen"
-        style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:#ffffff; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; transition: opacity 0.5s ease;">
-        <div
-            style="width: 50px; height: 50px; border: 4px solid #f3f4f6; border-top: 4px solid #0284c7; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;">
-        </div>
-        <div style="font-family:'Inter', sans-serif; font-weight:600; color:#1e293b; font-size:1.1rem;">Carregando
-            dados...</div>
-        <style>
-            @keyframes spin {
-                0% {
-                    transform: rotate(0deg);
-                }
-
-                100% {
-                    transform: rotate(360deg);
-                }
-            }
-        </style>
-    </div>
-
-    <div class="modal-overlay" id="export-modal">
-        <div class="modal-card" style="max-width: 400px; padding: 24px;">
-            <div class="modal-header" style="padding: 0 0 16px 0; margin-bottom: 16px;">
-                <div class="modal-title">Exportar Planilha</div>
-                <button class="close-btn" onclick="closeExportModal()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-            <div class="modal-body" style="padding: 0;">
-                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 16px;">Selecione o período que deseja
-                    exportar (em formato CSV). O filtro lateral de Unidade/Sala também será aplicado.</p>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-                    <div class="form-group" style="margin:0">
-                        <label class="form-label">Data Inicial</label>
-                        <input type="date" class="form-input" id="export-start">
-                    </div>
-                    <div class="form-group" style="margin:0">
-                        <label class="form-label">Data Final</label>
-                        <input type="date" class="form-input" id="export-end">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer" style="padding: 16px 0 0 0; background: transparent; margin-top: 24px;">
-                <button class="btn btn-ghost" onclick="closeExportModal()">Cancelar</button>
-                <button class="btn btn-primary" onclick="executeExport()">Baixar Arquivo</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    <footer>
+        &copy; 2025 Fundação Altino Ventura - Escritório da Qualidade
+    </footer>
 
 </body>
 
